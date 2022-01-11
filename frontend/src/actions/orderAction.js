@@ -19,7 +19,8 @@ import {
     ORDER_DETAILS_FAIL,
     CLEAR_ERRORS,
   } from "../constants/orderConstants";
-  
+  import { CART_EMPTY } from "../constants/cartConstants";
+
   import axios from "axios";
   
   // Create Order
@@ -35,6 +36,9 @@ import {
       const { data } = await axios.post("/api/v1/order/new", order, config);
   
       dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
+      // make the cart empty after placing order
+      dispatch({ type: CART_EMPTY });
+      localStorage.removeItem('cartItems');
     } catch (error) {
       dispatch({
         type: CREATE_ORDER_FAIL,
