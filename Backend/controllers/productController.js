@@ -70,7 +70,12 @@ exports.getAllProducts = async (req,res,next)=>{
 
 }
 
+// get Products Categories
+exports.getCatProducts = catchAsyncError(async (req, res, next) => {
+  const categories = await Product.find().distinct('category');
+  res.send(categories);
 
+})
 
 // Get All Product (Admin)
 exports.getAdminProducts = catchAsyncError(async (req, res, next) => {
