@@ -58,6 +58,24 @@ export const getProduct = (keyword= "",currentPage=1,price=[0,2500],category,rat
       });
     }
 }
+// Get CATEGORY 
+export const listProductCategories  = () => async (dispatch) => {
+  try {
+    dispatch({ type: CATEGORY_DETAILS_REQUEST });
+
+      const { data } = await axios.get("/api/v1/products/categories");
+
+    dispatch({
+      type: CATEGORY_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: CATEGORY_DETAILS_FAIL,
+      payload: error.message,
+    });
+  }
+};
 
 // Get All Products For Admin
 export const getAdminProduct = () => async (dispatch) => {
