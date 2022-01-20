@@ -32,7 +32,7 @@ const productSchema = mongoose.Schema({
     },
   ],
   category: {
-    type: String,
+    type: Array,
     required: [true, "Please Enter Product Category"],
   },
   Stock: {
