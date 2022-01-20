@@ -9,16 +9,6 @@ import Slider from "@material-ui/core/Slider";
 import {useAlert} from "react-alert";
 import MetaData from "../layout/MetaData";
 import  Pagination from "react-js-pagination";
-const categories = [
-    "Laptop",
-    "SmartPhones",
-    "PCs",
-    "Cameras",
-    "Gamming",
-    "shoes",
-    "Tops",
-    "T-shirts",
-  ];
 
 const Products = ({match,props}) => {
     const dispatch = useDispatch();
@@ -37,6 +27,7 @@ const Products = ({match,props}) => {
     resultPerPage,
     filteredProductsCount,
   } = useSelector((state) => state.products);
+const {categories} = useSelector((state) => state.categories);
 
   let count = filteredProductsCount;
 
@@ -91,7 +82,7 @@ const Products = ({match,props}) => {
                 
             <ul className="categoryBox">
         
-              {categories.map((category) => (
+              {categories && categories.map((category) => (
                 <li
                   className="category-link"
                   key={category}
