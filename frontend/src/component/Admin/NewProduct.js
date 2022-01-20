@@ -27,16 +27,10 @@ const NewProduct = ({ history }) => {
   const [images, setImages] = useState([]);
   const [imagesPreview, setImagesPreview] = useState([]);
 
-  const categories = [
-    "Laptop",
-    "SmartPhones",
-    "PCs",
-    "Cameras",
-    "Gamming",
-    "shoes",
-    "Tops",
-    "T-shirts",
-  ];
+
+  const handleCat = (e) => {
+    setCategory(e.target.value.split(","));
+  };
 
   useEffect(() => {
     if (error) {
@@ -59,9 +53,10 @@ const NewProduct = ({ history }) => {
     myForm.set("name", name);
     myForm.set("price", price);
     myForm.set("description", description);
-    myForm.set("category", category);
     myForm.set("Stock", Stock);
-
+    category.forEach((category) => {
+      myForm.append("category", category);
+    });
     images.forEach((image) => {
       myForm.append("images", image);
     });
@@ -133,16 +128,14 @@ const NewProduct = ({ history }) => {
               ></textarea>
             </div>
 
-            <div>
+             <div>
               <AccountTreeIcon />
-              <select onChange={(e) => setCategory(e.target.value)}>
-                <option value="">Choose Category</option>
-                {categories.map((cate) => (
-                  <option key={cate} value={cate}>
-                    {cate}
-                  </option>
-                ))}
-              </select>
+              <input
+                type="text"
+                placeholder="laptop,jeans"
+                required
+                value={category}
+                onChange={handleCat}/>
             </div>
 
             <div>
