@@ -278,3 +278,18 @@ export const reviewReducer = (state = {}, action) => {
       return state;
   }
 };
+
+export const productCategoryListReducer = (state = { loading: true, products: [] }, action) => {
+
+  switch (action.type) {
+    case CATEGORY_DETAILS_REQUEST:
+      return { loading: true };
+    case CATEGORY_DETAILS_SUCCESS:
+      return { loading: false, categories: action.payload };
+    case CATEGORY_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+
+}
