@@ -1,6 +1,10 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import MetaData from "../layout/MetaData";
 import "./Search.css";
+import { useAlert } from "react-alert";
+import { useSelector, useDispatch } from "react-redux";
+import { clearErrors, getProduct } from "../../actions/productAction";
+import Loader from "../layout/Loader/Loader";
 
 const Search = ({ history }) => {
   const [keyword, setKeyword] = useState("");
@@ -27,12 +31,15 @@ const Search = ({ history }) => {
       history.push("/products");
     }
   };
-
+  const OnSuggestionHandler = (keyword) => {
+    setKeyword(keyword);
+    setSuggestions([]);
+  }
   const ChangeHandler = (keyword) => {
     let matches = []
-    if(text.length > 0){
-      matches = products.filter(product =>{
-        const regex = new RegExp(`${text}`, "gi");
+    if (keyword.length > 0) {
+      matches = products.filter(product => {
+        const regex = new RegExp(`${keyword}`, "gi");
         return product.name.match(regex);
       })
     }
@@ -53,13 +60,22 @@ const Search = ({ history }) => {
               type="text"
               placeholder="Search a Product ..."
               value={keyword}
-              onChange={(e)=> ChangeHandler(e.target.value)}
+              onChange={(e) => ChangeHandler(e.target.value)}
+              onBlur={() => {
+                setTimeout(() => {
+                  setSuggestions([]);
+                }, 100)
+              }}
             />
             <input type="submit" value="Search" />
-            {suggestions && suggestions.map((suggestion,i)=>(
-              <div key={i} className="suggestion"> {suggestion.name} </div>
+            {suggestions && suggestions.map((suggestion, i) => (
+              <div className="suggestion">
+
+                <div key={i} onClick={() => OnSuggestionHandler(suggestion.name)}> {suggestion.name} </div>
+              </div>
             ))}
           </form>
+
         </Fragment>
       )
       }
