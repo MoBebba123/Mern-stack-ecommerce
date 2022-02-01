@@ -7,24 +7,27 @@ import { Typography } from "@material-ui/core";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import { Link } from "react-router-dom";
 
-const Cart = ({ history }) => {
+const Cart = ({ history, match }) => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
 
-  const increaseQuantity = (id, quantity, stock) => {
+
+  const increaseQuantity = (id, quantity, stock, color, size) => {
+
     const newQty = quantity + 1;
     if (stock <= quantity) {
       return;
     }
-    dispatch(addItemsToCart(id, newQty));
+    dispatch(addItemsToCart(id, newQty, color, size));
   };
 
-  const decreaseQuantity = (id, quantity) => {
+  const decreaseQuantity = (id, quantity, color, size) => {
+
     const newQty = quantity - 1;
     if (1 >= quantity) {
       return;
     }
-    dispatch(addItemsToCart(id, newQty));
+    dispatch(addItemsToCart(id, newQty, color, size));
   };
 
   const deleteCartItems = (id) => {
@@ -58,9 +61,13 @@ const Cart = ({ history }) => {
                 <div className="cartContainer" key={item.product}>
                   <CartItemCard item={item} deleteCartItems={deleteCartItems} />
                   <div className="cartInput">
+                    <div style={{ marginLeft: "-200px", width: "150px", display: "flex" }}>
+                      <div style={{ marginRight: "15px" }}> {item.color}</div>
+                      <div> {item.size}</div>
+                    </div>
                     <button
                       onClick={() =>
-                        decreaseQuantity(item.product, item.quantity)
+                        decreaseQuantity(item.product, item.quantity, item.color, item.size)
                       }
                     >
                       -
@@ -71,16 +78,17 @@ const Cart = ({ history }) => {
                         increaseQuantity(
                           item.product,
                           item.quantity,
-                          item.stock
+                          item.stock,
+                          item.color,
+                          item.size
                         )
                       }
                     >
                       +
                     </button>
                   </div>
-                  <p className="cartSubtotal">{`$${
-                    item.price * item.quantity
-                  }`}</p>
+                  <p className="cartSubtotal">{`$${item.price * item.quantity
+                    }`}</p>
                 </div>
               ))}
 
