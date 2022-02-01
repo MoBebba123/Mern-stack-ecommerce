@@ -29,6 +29,9 @@ import {
   NEW_PRODUCT_FAIL,
   NEW_PRODUCT_SUCCESS,
   NEW_PRODUCT_REQUEST,
+  CATEGORY_DETAILS_REQUEST,
+  CATEGORY_DETAILS_SUCCESS,
+  CATEGORY_DETAILS_FAIL,
 } from "../constants/productConstants";
 
 // Get All Products
