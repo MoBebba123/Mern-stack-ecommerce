@@ -78,8 +78,12 @@ const ProductDetails = ({ match }) => {
   };
 
   const addToCartHandler = () => {
-    dispatch(addItemsToCart(match.params.id, quantity, color, size));
-    alert.success("Item Added To Cart");
+    if(!size || !color){
+      alert.error("Please select color and size");
+    }else{
+      dispatch(addItemsToCart(match.params.id, quantity,size,color));
+      alert.success("Item Added To Cart");
+    }
   };
 
   const submitReviewToggle = () => {
