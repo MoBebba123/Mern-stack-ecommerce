@@ -21,6 +21,22 @@ import {
 } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
 import { NEW_REVIEW_RESET } from "../../constants/productConstants";
+import styled from 'styled-components';
+
+
+const ColorContainer = styled.div`
+display: flex;
+`
+
+const FilterColor = styled.div`
+
+width: 20px;
+height: 20px;
+border-radius: 50%;
+margin: 0px 5px;
+cursor: pointer;
+background-color :${props => props.color};
+`
 
 const ProductDetails = ({ match }) => {
   const dispatch = useDispatch();
@@ -45,7 +61,8 @@ const ProductDetails = ({ match }) => {
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("");
   const increaseQuantity = () => {
     if (product.Stock <= quantity) return;
 
@@ -61,7 +78,7 @@ const ProductDetails = ({ match }) => {
   };
 
   const addToCartHandler = () => {
-    dispatch(addItemsToCart(match.params.id, quantity));
+    dispatch(addItemsToCart(match.params.id, quantity, color, size));
     alert.success("Item Added To Cart");
   };
 
@@ -108,19 +125,19 @@ const ProductDetails = ({ match }) => {
           <MetaData title={`${product.name} -- ECOMMERCE`} />
           <div className="ProductDetails">
 
-          <Carousel>
-          {product.images &&
-              product.images.map((item,i) => (
-                <div className="imageContainer">
-                  <img
-                  className="CarouselImage" 
-                  key={item.url}   
-                  src={item.url}
-                  alt={`${i} Slide`}
-                  />
+            <Carousel>
+              {product.images &&
+                product.images.map((item, i) => (
+                  <div className="imageContainer">
+                    <img
+                      className="CarouselImage"
+                      key={item.url}
+                      src={item.url}
+                      alt={`${i} Slide`}
+                    />
                   </div>
-                  ))}
-          </Carousel>
+                ))}
+            </Carousel>
 
             <div>
               <div className="detailsBlock-1">
@@ -141,6 +158,31 @@ const ProductDetails = ({ match }) => {
                     <button onClick={decreaseQuantity}>-</button>
                     <input readOnly type="number" value={quantity} />
                     <button onClick={increaseQuantity}>+</button>
+                  </div>
+                  <div className="Filter">
+                    <select className="FilterSize"
+                      onChange={(e) => setSize(e.target.value)}
+                      value={size}
+                    >
+                      <option >Size</option>
+                      {product.size?.map((s) => (
+                        <option className="FilterSizeOption"
+                          key={s}
+                          value={s}
+                          required
+                        >
+                          {s}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="Filter">
+                    <ColorContainer>
+                      <span className="FilterTitle">Color</span>
+
+                      {product.color?.map((c) => (
+                        <FilterColor color={c} key={c} value={color} onClick={() => setColor(c)}  ></FilterColor>
+                      ))}
+                    </ColorContainer>
                   </div>
                   <button
                     disabled={product.Stock < 1 ? true : false}
