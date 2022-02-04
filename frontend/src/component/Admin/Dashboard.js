@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Sidebar from "./Sidebar.js";
 import "./dashboard.css";
 import { Typography } from "@material-ui/core";
@@ -9,10 +9,30 @@ import { getAdminProduct } from "../../actions/productAction";
 import { getAllOrders } from "../../actions/orderAction.js";
 import { getAllUsers } from "../../actions/userAction.js";
 import MetaData from "../layout/MetaData";
+import Chart from "../layout/Chart/Chart.js";
+import axios from "axios";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const [userStats, setUserStats] = useState([]);
 
+  const MONTHS = useMemo(
+    () => [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Agu",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    []
+  );
   const { products } = useSelector((state) => state.products);
 
   const { orders } = useSelector((state) => state.allOrders);
@@ -33,6 +53,40 @@ const Dashboard = () => {
     dispatch(getAllOrders());
     dispatch(getAllUsers());
   }, [dispatch]);
+
+
+  useEffect(() => {
+
+
+    const getUserStats = async () => {
+
+
+      try {
+
+        const url = '/api/v1/admin/users/stats';
+
+        const res = await axios.get(url, {
+          method: "GET",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json",
+            // "Authorization": "Bearer " + token,
+            "Access-Control-Allow-Methods": "GET",
+          },
+        });
+        res.data.map((item) =>
+          setUserStats((prev) => [
+            ...prev,
+            { name: MONTHS[item._id - 1], "Active User": item.total },
+          ])
+
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getUserStats();
+  }, [MONTHS]);
 
   let totalAmount = 0;
   orders &&
@@ -92,6 +146,13 @@ const Dashboard = () => {
             </Link>
           </div>
         </div>
+
+        <Chart
+          data={userStats}
+          title="User Analytics"
+          grid
+          dataKey="Active User"
+        />
 
         <div className="lineChart">
           <Line data={lineState} />
