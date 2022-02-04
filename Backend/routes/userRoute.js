@@ -12,6 +12,7 @@ const {
      getSingleUser,
      updateUserRole,
      deleteUser,
+     getUsersStats,
      
      } = require("../controllers/userController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
@@ -52,6 +53,8 @@ router
      .get(isAuthenticatedUser,authorizeRoles("admin"), getSingleUser)
      .put(isAuthenticatedUser,authorizeRoles("admin"),updateUserRole)
      .delete(isAuthenticatedUser,authorizeRoles("admin"),deleteUser );
+
+     router.route("/admin/users/stats").get(isAuthenticatedUser, authorizeRoles("admin"),getUsersStats);
 
 
 
