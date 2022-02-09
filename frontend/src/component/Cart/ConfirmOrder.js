@@ -69,6 +69,8 @@ const ConfirmOrder = ({ history }) => {
                     <Link to={`/product/${item.product}`}>
                       {item.name}
                     </Link>{" "}
+                      <div style={{ marginRight: "15px" }}> {item.color}</div>
+                      <div> {item.size}</div>
                     <span>
                       {item.quantity} X ${item.price} ={" "}
                       <b>${item.price * item.quantity}</b>
